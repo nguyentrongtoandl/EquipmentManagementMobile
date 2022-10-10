@@ -1,0 +1,118 @@
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<style>
+		#one>div {
+			background: yellow;
+			transition: position 2s;
+		}
+
+		#two>div {
+			background: #03a9f4;
+			transition: position 2s;
+		}
+
+		svg > g {
+			position: absolute;
+			user-select: none;
+		}
+
+		text::selection {
+			background: #fff;
+			color: #ff0000;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="one"
+		style="width:300px;height:300px;background:rgb(119, 118, 118);display: inline-flex;justify-content: center; align-items: center;">
+		<div style="width: 100px; height:100px; position:absolute;" class="changeable">
+			TOAN1
+		</div>
+	</div>
+
+	<div id="two"
+		style="width:300px;height:300px;background:rgb(80, 90, 80);display: inline-flex;;justify-content: center; align-items: center;">
+		<div style="width: 100px; height:100px; position:absolute;" class="changeable">
+			TOAN2
+		</div>
+	</div>
+
+	<script>
+		jQuery.fn.swapElement = function (to) {
+			return this.each(function () {
+				var copy_to = $(to).clone(true);
+				var copy_from = $(this).clone(true);
+
+				$(to).replaceWith(copy_from);
+				$(this).replaceWith(copy_to);
+			});
+		};
+
+		function initializeSwapElement(effectFlag = false) {
+			var choseElement = null;
+
+			$('.changeable').click(function (e) {
+				referenceElementEvent = $(e.target);
+
+				if (!choseElement) {
+					choseElement = referenceElementEvent;
+					$(choseElement).css({ "outline": "2px dashed red" });
+					return;
+				}
+
+				if (choseElement && $(choseElement).get(0) === $(referenceElementEvent).get(0)) {
+					$(choseElement).css({ "outline": "none" });
+					choseElement = null;
+					referenceElementEvent = null;
+					return;
+				}
+
+				choseElement.css({ "outline": "none" });
+
+				if (effectFlag) {
+					p1 = $(choseElement).position();
+					p2 = $(referenceElementEvent).position();
+
+					e1 = $(choseElement).clone().addClass('swapElementClone');
+					e2 = $(referenceElementEvent).clone().addClass('swapElementClone');
+
+					e1.insertAfter(choseElement.hide());
+					e2.insertAfter(referenceElementEvent.hide());
+
+					$(e2).animate({
+						top: p1.top,
+						left: p1.left
+					}, function (e) {
+						e2.remove();
+					});
+
+					$(e1).animate({
+						top: p2.top,
+						left: p2.left
+					}, function (e) {
+						e1.remove();
+					});
+				}
+
+				choseElement.show();
+				referenceElementEvent.show();
+
+				$(choseElement).swapElement(referenceElementEvent);
+
+				choseElement = null;
+				referenceElementEvent = null;
+			});
+		}
+
+		initializeSwapElement(true);
+	</script>
+</body>
+
+</html>
