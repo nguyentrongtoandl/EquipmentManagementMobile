@@ -109,6 +109,13 @@
 				choseElement = null;
 				referenceElementEvent = null;
 			});
+
+			$(document).click(function (e) {
+				if (choseElement && choseElement.css('outline') != 'none' && !$(e.target).hasClass('changeable')) {
+					choseElement.css({ "outline": "none" });
+					return;
+				}
+			});
 		}
 
 		initializeSwapElement(true);
