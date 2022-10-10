@@ -113,6 +113,7 @@
 			$(document).click(function (e) {
 				if (choseElement && choseElement.css('outline') != 'none' && !$(e.target).hasClass('changeable')) {
 					choseElement.css({ "outline": "none" });
+					choseElement = null;
 					return;
 				}
 			});
